@@ -1,0 +1,145 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 11/09/2017, 06:57:17 PM
+    Author     : carlos.juarez
+*/
+
+html,body{
+    background-image: url('../images/bck5.jpg');
+    height: 100%;
+}
+
+.navbar{
+    margin-bottom: 0px;
+}
+
+/*******************************/
+/* Estilos botones de comandos */
+/*******************************/
+
+.ui-widget .ui-widget{
+    font-size:12px;
+}
+
+.botonComando{
+    width:35px;
+    display: block;
+}
+
+.textCommand{
+    margin: 0px;
+}
+
+.textCommandAbr{
+    margin: 0px;
+    text-decoration: underline;
+    color: dodgerblue;
+    font-weight: bold;
+    letter-spacing: 2px;
+    padding: 0px 5px 0px 5px;
+    font-size: 14px;
+}
+
+.shorcutCommand{
+    font-size: 11px;
+    background: #fefefe;
+    color: #66afe9;
+    display: block;
+}
+
+.btn.btn-default.boton_opciones{
+    display: block;
+    width:90px;
+}
+
+.ui-commandlink.ui-widget:hover{
+    text-decoration: none;
+}
+
+/* Elimina el box-sizing: border-box de los elementos "SelectOneMenu" */
+.ui-selectonemenu-label.ui-inputfield.ui-corner-all{
+	-webkit-box-sizing: content-box;
+	box-sizing: content-box;
+}
+
+
+/* Elimina el box-sizing: border-box de los elementos "SelectOneMenu" */
+.ui-selectonemenu-trigger.ui-state-default.ui-corner-right{
+	-webkit-box-sizing: content-box;
+	box-sizing: content-box;
+}
+
+/* Cambia el tamaño de la fuente de los campos de texto*/
+.ui-inputfield, .ui-widget-content.ui-inputfield, .ui-widget-header.ui-inputfield{
+    font-size:11px;
+}
+/* Cambia el tamaño de las etiquetas (outputText)*/
+.ui-widget{
+    font-size:11px;
+}
+
+/* Cambia el tamaño de las etiquetas gran total (outputText)*/
+.ui-widget.textoSeccionTotal{
+    font-size:12px;
+    font-weight: bold;
+    color: #555555;
+}
+
+/* Cambia el tamaño de las etiquetas gran total (outputText)*/
+.ui-widget.textoSeccionDescto{
+    font-size:16px;
+    font-weight: normal;
+    color: #eeeeee;
+}
+
+/* Cambia el tamaño de las etiquetas gran total (outputText)*/
+.ui-widget.textoSeccionImpuesto{
+    font-size:16px;
+    font-weight: normal;
+    color: red;
+}
+
+/* Cambia el tamaño de las etiquetas gran total (outputText)*/
+.ui-widget.textoSeccionGranTotal{
+    font-size:20px;
+    font-weight: bold;
+    color: #555555;
+}
+
+/* Define la altura de la tabla*/
+.ui-datatable.ui-widget.ui-datatable-scrollable{
+    height: 98%;
+}
+
+.ui-datatable-scrollable-body{
+    height: 98%;
+}
+
+.ui-widget-header{
+   
+}
+
+.ui-helper-clearfix::after{
+    height: 30px;
+}
+
+.ui-dialog .ui-dialog-title{
+    margin: 0px;
+    float: none;
+}
+
+.ui-dialog .ui-dialog-titlebar{
+    padding: .1em .4em .4em 1em;
+     background: #1995dc;
+    color: rgba(255, 255, 255, 1);
+    font-size: 30px;
+    height: 50px;
+}
+
+.ui-selectmanybutton{
+    display: table-caption;
+}

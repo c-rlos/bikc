@@ -1,0 +1,1119 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <link href="resources/css/cssGeneral.css" rel="stylesheet" type="text/css"/>
+        <title>Punto de venta</title>
+    </h:head>
+    <h:body>
+
+
+
+        <ui:composition template="./templates/plantilla.xhtml">
+            <ui:define name="content">
+                <h:form id="form1" style="height:100%;">  
+                    <p:hotkey bind="esc" handler="PF('w_buscar','w_buscar2','w_cantidad','w_precioVenta','w_verificar','w_cobrar','w_documento','w_clientes','w_vendedor','w_espera','w_continuar').hide();" />
+                    <p:hotkey bind="ctrl+B" handler="PF('w_buscar').show();"/>
+                    <!--p:hotkey bind="ctrl+A" handler="PF('w_cantidad').show();"/>
+                    <p:hotkey bind="ctrl+M" handler="PF('w_precioVenta').show();"/>
+                    <p:hotkey bind="ctrl+L" handler="PF('w_eliminar').show();"/>
+                    <p:hotkey bind="ctrl+F" handler="PF('w_verificar').show();"/>
+                    <p:hotkey bind="ctrl+X" handler="PF('w_cancelar').show();"/>
+                    <p:hotkey bind="ctrl+S" handler="PF('w_cobrar').show();"/>
+                    <p:hotkey bind="ctrl+D" handler="PF('w_documento').show();"/>
+                    <p:hotkey bind="ctrl+I" handler="PF('w_clientes').show();"/>
+                    <p:hotkey bind="ctrl+V" handler="PF('w_vendedor').show();"/>
+                    <p:hotkey bind="ctrl+E" handler="PF('w_espera').show();"/>
+                    <p:hotkey bind="ctrl+R" handler="PF('w_continuar').show();"/>
+                    <p:hotkey bind="ctrl+K" handler="PF('w_buscar2').show();"/-->
+
+
+                    <table style="border:1px solid #d5d5d5; width:100%; height: calc(100% - 50px);">
+                        <tr>
+                            <!-- Sección izquierda comandos -->
+                            <td style="padding-right: 8px; vertical-align: top;">
+                                <p:commandLink actionListener="#{Pos.camposCobrar}" onclick="PF('w_cobrar').show()" update=":formCobrar:campoTotal"  >
+                                    <button class="btn btn-default boton_opciones" type="button">
+                                        <center>
+                                            <p:graphicImage value="resources/images/icons/venta.png" styleClass="botonComando"/>
+                                            <p:outputLabel value="Cobrar" styleClass="textCommand"/>
+                                            <kbd class="shorcutCommand">(Crtl+S)</kbd> 
+                                        </center>
+                                    </button>
+                                </p:commandLink>
+                                <p:commandLink onclick="PF('w_documento').show()">
+                                    <button class="btn btn-default boton_opciones" type="button">
+                                        <center>
+                                            <p:graphicImage value="resources/images/icons/documento.png" styleClass="botonComando"/>
+                                            <p:outputLabel value="Docto." styleClass="textCommand"/>
+                                            <kbd class="shorcutCommand">(Crtl+D)</kbd> 
+                                        </center>
+                                    </button>
+                                </p:commandLink>
+                                <p:commandLink onclick="PF('w_clientes').show()">
+                                    <button class="btn btn-default boton_opciones" type="button">
+                                        <center>
+                                            <p:graphicImage value="resources/images/icons/cliente.png" styleClass="botonComando"/>
+                                            <p:outputLabel value="Cliente" styleClass="textCommand"/>
+                                            <kbd class="shorcutCommand">(Crtl+I)</kbd> 
+                                        </center>
+                                    </button>
+                                </p:commandLink>
+                                <p:commandLink onclick="PF('w_vendedor').show();">
+                                    <button class="btn btn-default boton_opciones" type="button">
+                                        <center>
+                                            <p:graphicImage value="resources/images/icons/vendedor.png" styleClass="botonComando"/>
+                                            <p:outputLabel value="Cajero" styleClass="textCommand"/>
+                                            <kbd class="shorcutCommand">(Crtl+V)</kbd> 
+                                        </center>
+                                    </button>
+                                </p:commandLink>
+                                <p:commandLink onclick="PF('w_espera').show();">
+                                    <button class="btn btn-default boton_opciones" type="button">
+                                        <center>
+                                            <p:graphicImage value="resources/images/icons/almacena_venta.png" styleClass="botonComando"/>
+                                            <p:outputLabel value="Esperar" styleClass="textCommand"/>
+                                            <kbd class="shorcutCommand">(Crtl+E)</kbd> 
+                                        </center>
+                                    </button>
+                                </p:commandLink>
+                                <p:commandLink actionListener="#{Pos.continuar}" onclick="PF('w_continuar').show()" >
+                                    <button class="btn btn-default boton_opciones" type="button">
+                                        <center>
+                                            <p:graphicImage value="resources/images/icons/recupera_venta.png" styleClass="botonComando"/>
+                                            <p:outputLabel value="Continuar" styleClass="textCommand"/>
+                                            <kbd class="shorcutCommand">(Crtl+R)</kbd> 
+                                        </center>
+                                    </button>
+                                </p:commandLink>
+                            </td>
+
+                            <td style="vertical-align:top; width:100%; background-image: url('./resources/images/bck3.jpg'); background-repeat: no-repeat; background-size: 100% 100%; border: 3px solid rgb(25, 149, 220); height: calc(100% - 500px);">
+                                <table style="width:100%; height: 100%;">
+                                    <!--Encabezado Venta -->
+                                    <tr>
+                                        <td style="vertical-align: top;">
+                                            <table border="0" style="width:98%; background: #ffffff; border:1px solid gray; border-radius: 3px; margin: 7px 10px 7px 10px;">
+                                                <tr>
+                                                    <td>
+                                                        <table style="margin: 7px 10px 7px 10px;">
+                                                            <tr>
+                                                                <td>
+                                                                    <p:outputLabel for="docto" value="Documento:" />
+
+                                                                </td>
+                                                                <td style="padding-left:5px;">
+                                                                    <p:selectOneMenu id="docto" style="width:180px;">
+                                                                        <f:selectItems value="#{Pos.documentos}" />
+                                                                    </p:selectOneMenu>
+
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <p:outputLabel for="cliente" value="Cliente:" />
+                                                                </td>
+                                                                <td style="padding-left:5px;">
+                                                                    <p:selectOneMenu id="cliente" value="#{Pos.cliente}" style="width:180px;">
+                                                                        <f:selectItems value="#{Pos.clientes}" />
+                                                                    </p:selectOneMenu>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                    <td>
+                                                        <table cellspacing="10" style="margin: 7px 10px 7px 10px;">
+                                                            <tr>
+                                                                <td style="padding-bottom:1px;">
+                                                                    <p:outputLabel value="Fecha:" />
+                                                                </td>
+                                                                <td style="padding-left:5px; padding-bottom:1px;">
+                                                                    <p:inputText value="#{Pos.fecha}" readonly="true" />
+                                                                </td>
+                                                            </tr>
+                                                            <tr >
+                                                                <td style="padding-top:1px;">
+                                                                    <p:outputLabel value="Hora:" />
+                                                                </td>
+                                                                <td style="padding-left:5px; padding-top:1px;">
+                                                                    <p:inputText value="#{Pos.hora}" readonly="true" />
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                    <td style="width:360px;">
+                                                        <p:inputText id="idCampoBusqueda" 
+                                                                     style="width: 350px; height: 60px; font-size: 25px; font-weight: bold; text-align: right;"
+                                                                     value="#{Pos.campoBusqueda}" placeholder="#{Pos.placeHolder}">
+
+                                                            <p:ajax event="change" listener="#{Pos.buscaProductoVenta}" update=":form1:form:table_ventas :form1:idCampoBusqueda :formSeleccionaProducto:finded_products"/>
+                                                        </p:inputText>
+
+                                                    </td>
+                                                    <td>
+                                                        <p:commandLink  update=":form1:form:table_ventas :form1:idCampoBusqueda :formSeleccionaProducto:finded_products " 
+                                                                        onsuccess="document.getElementById('form1:idCampoBusqueda').focus()">
+                                                            <button class="btn btn-default boton_opciones" type="button" style="width:70px;">
+                                                                <center>
+                                                                    <p:graphicImage value="resources/images/icons/buscar.png" styleClass="botonComando" style="width:40px;"/>
+                                                                </center>
+                                                            </button>
+                                                        </p:commandLink>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+
+                                    <!--Lista de productos -->
+                                    <tr style="height: 100%;">
+                                        <td style="vertical-align: top;">
+                                            <table border="0" style="width:98%; height: 98.5%; background: #ffffff; border:1px solid gray; border-radius: 3px; margin: 0px 10px 7px 10px;">
+                                                <tr>
+                                                    <td style="vertical-align: top; ">
+                                                        <h:form id="form">
+                                                            <p:dataTable id="table_ventas" 
+                                                                         value="#{Pos.productosPorVender}" 
+                                                                         selectionMode="single"
+                                                                         selection="#{Pos.selectedVenta}" 
+                                                                         var="producto" 
+                                                                         rowKey="#{producto.idProducto}"
+                                                                         scrollable="true">
+
+                                                                <p:ajax event="rowSelect" listener="#{Pos.printSelectedRow}"  />
+
+
+                                                                <p:column headerText="Cantidad" width="70" style="font-size: 12px; font-weight: normal;">
+                                                                    <h:outputText value="#{producto.cantidad}" />
+                                                                </p:column>
+
+                                                                <p:column headerText="Descripción" style="font-size: 12px; font-weight: normal;">
+                                                                    <h:outputText value="#{producto.descripcion} " />
+                                                                </p:column>
+
+                                                                <p:column headerText="Precio U." width="80" style="font-size: 12px; font-weight: normal;">
+                                                                    <h:outputText value="#{producto.precioUnitario}" />
+                                                                </p:column>
+
+                                                                <p:column headerText="Descuento" width="100" style="font-size: 12px; font-weight: normal;">
+                                                                    <h:outputText value="#{producto.descuento}" />
+                                                                </p:column>
+
+                                                                <p:column headerText="TD" width="60" style="font-size: 12px; font-weight: normal;">
+                                                                    <h:outputText value="#{producto.tipoDescuento}" />
+                                                                </p:column>
+
+                                                                <p:column headerText="Importe" width="100" style="font-size: 12px; font-weight: normal;">
+                                                                    <h:outputText value="#{producto.importe}" />
+                                                                </p:column>
+                                                            </p:dataTable>
+                                                        </h:form>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+
+                                    <!--Seccion Total Venta -->
+                                    <tr>
+                                        <td style="height: 100px;">
+                                            <table style=" width:98%; background: inherit; border:0px solid gray; border-radius: 3px; margin: 0px 10px 7px 10px;">
+                                                <tr>
+                                                    <td style="text-align: right; padding-right: 20px;">
+                                                        <p:outputLabel value="Vendedor:" styleClass="textoSeccionTotal"/>
+                                                    </td>
+                                                    <td>
+                                                        <p:selectOneMenu id="vendedorId" style="width:280px;">
+                                                            <f:selectItems itemLabel="Ticket" value="#{Pos.vendedores}" />
+                                                        </p:selectOneMenu>
+                                                    </td>
+                                                    <td style="text-align: right;">
+                                                        <p:outputLabel value="Descuento:" styleClass="textoSeccionDescto"/>
+                                                    </td>
+                                                    <td style="text-align: left; padding-left: 5px;">
+                                                        <p:outputLabel id="descuento" value="#{Pos.descuento} MXN" styleClass="textoSeccionDescto" style="font-weight: bold;"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align: right; padding-right: 20px;">
+                                                        <p:outputLabel value="Terminal:" styleClass="textoSeccionTotal"/>
+                                                    </td>
+                                                    <td>                    
+                                                        <p:selectOneMenu id="terminalId" value="#{Pos.terminal}" style="width:280px;">
+                                                            <f:selectItems itemLabel="Ticket" value="#{Pos.terminales}" />
+                                                        </p:selectOneMenu>
+                                                    </td>
+                                                    <td style="text-align: right;">
+                                                        <p:outputLabel value="Impuestos:" styleClass="textoSeccionImpuesto"/>
+                                                    </td>
+                                                    <td style="text-align: left; padding-left: 5px;">
+                                                        <p:outputLabel id="impuestos" value="#{Pos.impuestos} MXN" styleClass="textoSeccionImpuesto" style="font-weight: bold;"/>
+                                                    </td>
+                                                </tr>
+                                                <tr style="height:50px;">
+                                                    <td style="text-align: right; padding-right: 20px;">
+                                                        <p:outputLabel value="Ventas sin cerrar:" styleClass="textoSeccionTotal"/>
+                                                    </td>
+                                                    <td>
+
+                                                        <p:dataTable id="en_espera" var="venta" scrollable="true" value="#{Pos.ventasEspera}" scrollHeight="80" editable="true" style="height: 90px;width:280px">
+
+                                                            <p:column  style="height: 1px">
+                                                                <h:outputText value="Venta #{venta.id_venta}" style="height: 10px" />
+                                                            </p:column>
+
+                                                            <p:column style="width:90px;height: 1px">
+                                                                <p:commandLink value="Continuar" actionListener="#{Pos.continuar(venta,true)}" update=":form1:form:table_ventas :form1:totalVenta :form1:impuestos :form1:descuento" onsuccess="PF('w_espera').hide();"/>
+                                                            </p:column>
+                                                        </p:dataTable>
+                                                    </td>
+                                                    <td style="text-align: right;">
+                                                        <p:outputLabel value="Total a pagar:" styleClass="textoSeccionGranTotal"/>
+                                                    </td>
+                                                    <td style="text-align: left; padding-left: 5px;">
+                                                        <p:outputLabel id="totalVenta" value="#{Pos.totalVenta} MXN" styleClass="textoSeccionGranTotal" />
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+
+
+                            </td>
+                            <!-- Sección derecha comandos -->
+                            <td style="padding-left: 8px; vertical-align: top;">
+                                <p:commandLink onclick="PF('w_buscar').show();" >
+                                    <button class="btn btn-default boton_opciones" type="button">
+                                        <center>
+                                            <p:graphicImage value="resources/images/icons/buscar.png" styleClass="botonComando"/>
+                                            <p:outputLabel value="Buscar" styleClass="textCommand"/>
+                                            <kbd class="shorcutCommand">(Crtl+B)</kbd> 
+                                        </center>
+                                    </button>
+                                </p:commandLink>
+                                <p:commandLink onclick="PF('w_cantidad').show()" update=":formCambiarCantidad:spinnerCantidad" >
+                                    <button class="btn btn-default boton_opciones" type="button">
+                                        <center>
+                                            <p:graphicImage value="resources/images/icons/cantidad.png" styleClass="botonComando"/>
+                                            <p:outputLabel value="Cantidad" styleClass="textCommand"/>
+                                            <kbd class="shorcutCommand">(Crtl+A)</kbd> 
+                                        </center>
+                                    </button>
+                                </p:commandLink>
+
+                                <p:commandLink actionListener="#{Pos.preciosVenta}" onclick="PF('w_precioVenta').show()" update=":formPrecios:campoPreVenta :formPrecios:campoPreMay1 :formPrecios:campoPreMay2">
+                                    <button class="btn btn-default boton_opciones" type="button">
+                                        <center>
+                                            <p:graphicImage value="resources/images/icons/precio.png" styleClass="botonComando"/>
+                                            <p:outputLabel value="Precio" styleClass="textCommand"/>
+                                            <kbd class="shorcutCommand">(Crtl+M)</kbd> 
+                                        </center>
+                                    </button>
+                                </p:commandLink>
+                                <p:commandLink onclick="PF('w_eliminar').show();" >
+                                    <button class="btn btn-default boton_opciones" type="button">
+                                        <center>
+                                            <p:graphicImage value="resources/images/icons/remover.png" styleClass="botonComando"/>
+                                            <p:outputLabel value="Eliminar" styleClass="textCommand"/>
+                                            <kbd class="shorcutCommand">(Crtl+L)</kbd> 
+                                        </center>
+                                    </button>
+                                </p:commandLink>
+                                <p:commandLink onclick="PF('w_verificar').show();">
+                                    <button class="btn btn-default boton_opciones" type="button">
+                                        <center>
+                                            <p:graphicImage value="resources/images/icons/verificador.png" styleClass="botonComando"/>
+                                            <p:outputLabel value="Verif." styleClass="textCommand"/>
+                                            <kbd class="shorcutCommand">(Crtl+F)</kbd> 
+                                        </center>
+                                    </button>
+                                </p:commandLink>
+                                <p:commandLink onclick="PF('w_cancelar').show();">
+                                    <button class="btn btn-default boton_opciones" type="button">
+                                        <center>
+                                            <p:graphicImage value="resources/images/icons/cancelar.png" styleClass="botonComando"/>
+                                            <p:outputLabel value="Cancelar" styleClass="textCommand"/>
+                                            <kbd class="shorcutCommand">(Crtl+X)</kbd> 
+                                        </center>
+                                    </button>
+                                </p:commandLink>
+                            </td>
+                        </tr>
+                    </table>
+                </h:form>
+
+                <!-- Sección de dialogos-->
+
+                <!-- Sección seleccion de productos-->
+                <p:dialog header="Selección de productos" widgetVar="w_buscar2" id="dlgSeleccionar" modal="true" height="500" width="700" styleClass="dialogo" >
+                    <h:form  id="formSeleccionaProducto" >
+                        <br></br>
+                        <p:dataTable 
+                            id="finded_products" 
+                            value="#{Pos.listaProductos}" 
+                            selectionMode="single" 
+                            selection="#{Pos.selectedProduct}" 
+                            rowKey="#{product.idProducto}" 
+                            var="product" 
+                            style="margin-bottom:0; height: 230px; max-height: 230px;"
+                            scrollable="true" widgetVar="carsTable">
+
+                            <p:ajax event="rowDblselect" listener="#{Pos.seleccionaProductoParaVenta}" update=":form1:form:table_ventas" />
+
+
+
+                            <p:column headerText="Clave" width="70" style="font-size: 12px; font-weight: normal;">
+                                <h:outputText value="#{product.idProducto}"/>
+                            </p:column>
+
+                            <p:column headerText="Descripción" style="font-size: 12px; font-weight: normal;">
+                                <h:outputText value="#{product.descripcion}" />
+                            </p:column>
+
+                            <p:column headerText="Precio U." width="80" style="font-size: 12px; font-weight: normal;">
+                                <h:outputText value="#{product.precioUno}" />
+                            </p:column>
+
+                            <p:column headerText="Existencia" width="80" style="font-size: 12px; font-weight: normal;">
+                                <h:outputText value="#{product.inventario}" />
+                            </p:column>
+
+                        </p:dataTable>
+
+                        <table style="width: 100%;">
+                            <br></br>
+                            <tr style="text-align: right">
+                                <p:outputLabel value="Doble clic para selecionar producto:" style="font-size: 13px; padding-right: 10px; color: #1995dc"/>
+                            </tr>
+                            <tr style="height: 50px;">
+                                <td style=";width: 20%;">
+                                    <p:outputLabel value="Presiona la tecla:" style="font-size: 13px; color: red;"/>
+                                </td>
+                                <td style="width: 10%">
+                                    <p:commandLink style="position: rigth;">
+                                        <button class="btn btn-primary" type="button">
+                                            <center>
+                                                <p:outputLabel value="ESC" styleClass="textCommand"/>
+                                            </center>
+                                        </button>
+                                    </p:commandLink>
+                                </td>
+                                <td>
+                                    <p:outputLabel value="para continuar la venta" style="font-size: 13px; padding-right: 10px; color: crimson"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </h:form>
+                    <br/>
+                    <p:commandLink onsuccess="PF('w_buscar2').hide()"  style="margin-left: 90%">
+                        <button class="btn btn-primary" type="button">
+                            <p:outputLabel value="Aceptar" styleClass="textCommand"/>
+                        </button>
+                    </p:commandLink>
+                </p:dialog>
+
+                <!-- Sección catalogo de productos-->
+                <p:dialog header="Catálogo de productos" widgetVar="w_buscar" id="dlgBuscar" modal="true" height="500" width="700" styleClass="dialogo" >
+                    <h:form id="formBuscaProducto">
+                        <h:panelGrid columns="1" cellpadding="5" border="0" width="100%">
+                            <h:panelGrid columns="3" cellpadding="5" border="0" width="100%">
+                                <p:outputLabel value="Buscar:  " style="font-size: 25px; font-weight: bold; padding-right: 10px;"/>
+                                <p:inputText id="idCampoBusqueda2" 
+                                             value="#{Pos.campoBusqueda}" 
+                                             style="width: 100%; height: 50px; font-size: 30px; font-weight: bold; text-align: right;">
+                                    <p:ajax event="change" listener="#{Pos.buscaProductoCatalogoProducto}" update="all_products :formBuscaProducto:idCampoBusqueda2"/>
+                                </p:inputText>
+                                <p:commandLink>
+                                    <button class="btn btn-default boton_opciones" type="button" style="width:70px;">
+                                        <center>
+                                            <p:graphicImage value="resources/images/icons/buscar.png" styleClass="botonComando" style="width:40px;"/>
+                                        </center>
+                                    </button>
+                                </p:commandLink>
+                            </h:panelGrid>
+                            <br/>
+                            <p:dataTable 
+                                id="all_products" 
+                                value="#{Pos.listaProductos}" 
+                                selectionMode="single" 
+                                selection="#{Pos.selectedProduct}" 
+                                rowKey="#{product.idProducto}" 
+                                var="product" 
+                                style="margin-bottom:0; height: 270px; max-height: 270px;"
+                                scrollable="true" widgetVar="carsTable">
+
+                                <p:ajax event="rowDblselect" listener="#{Pos.seleccionaProductoParaVenta}" update="all_products :form1:form:table_ventas" />
+
+                                <p:column headerText="Clave" width="70" style="font-size: 12px; font-weight: normal;">
+                                    <h:outputText value="#{product.idProducto}"/>
+                                </p:column>
+
+                                <p:column headerText="Descripción" style="font-size: 12px; font-weight: normal;">
+                                    <h:outputText value="#{product.descripcion}" />
+                                </p:column>
+
+                                <p:column headerText="Precio U." width="80" style="font-size: 12px; font-weight: normal;">
+                                    <h:outputText value="#{product.precioUno}" />
+                                </p:column>
+
+                                <p:column headerText="Existencia" width="80" style="font-size: 12px; font-weight: normal;">
+                                    <h:outputText value="#{product.inventario}" />
+                                </p:column>
+
+                            </p:dataTable>
+                            <br/>
+                            <p:outputLabel value="Doble clic sobre el producto para selecionarlo" style="font-size: 13px; padding-right: 10px; color: #1995dc"/>
+                            <br/>
+                            <p:panel>
+                                <p:outputLabel value="Presiona la tecla:" style="font-size: 13px; color: crimson;"/>
+                                <p:outputLabel value="ESC" styleClass="textCommandAbr"/>
+                                <p:outputLabel value="para continuar la venta" style="font-size: 13px; padding-right: 10px; color: crimson;"/>
+                            </p:panel>
+                            <f:facet name="footer">
+                                <p:commandButton style="margin-left: 90%; display:none;" value="No accion" />
+                            </f:facet>
+                            <br/>
+                        </h:panelGrid>
+                    </h:form>
+                    <p:commandButton style="margin-left: 90%" value="Aceptar" actionListener="#{Pos.cierraDialogo}">
+                        <f:attribute  name="tipoDialogo" value="dialogo.w_buscar"/>
+                    </p:commandButton>
+                </p:dialog>
+
+                <!-- Sección actualizar cantidad-->
+                <p:dialog header="Cantidad" widgetVar="w_cantidad" id="dlgCantidad" modal="true" height="230" width="700">
+                    <h:form id="formCambiarCantidad" style="">
+                        <h:panelGrid columns="1" cellpadding="5" border="1" width="100%">
+                            <h:panelGrid columns="2" cellpadding="5" border="1" width="100%">
+                                <p:outputLabel value="Cantidad:" style="font-size: 25px; font-weight: bold; padding-right: 10px;"/>
+                                <p:spinner id="spinnerCantidad" value="#{Pos.selectedVenta.cantidad}" style="width: 375px; height: 50px; font-size: 30px; font-weight: bold; text-align: right;"/>
+                            </h:panelGrid>
+                            <br/>
+                            <p:panel>
+                                <p:outputLabel value="Presiona la tecla:" style="font-size: 13px; color: crimson;"/>
+                                <p:outputLabel value="ESC" styleClass="textCommandAbr"/>
+                                <p:outputLabel value="para continuar la venta" style="font-size: 13px; padding-right: 10px; color: crimson;"/>
+                            </p:panel>
+                            <f:facet name="footer">
+                                <p:commandButton style="margin-left: 90%; display:none;" value="No accion" />
+                            </f:facet>
+                            <br/>
+                        </h:panelGrid>
+                    </h:form>
+                    <p:commandButton style="margin-left: 90%" value="Aceptar" actionListener="#{Pos.cierraDialogo}" update="form1:form:table_ventas :form1:totalVenta :form1:descuento">
+                        <f:attribute  name="tipoDialogo" value="dialogo.w_cantidad"/>
+                    </p:commandButton>
+                    
+                    
+                </p:dialog>
+
+                <!-- Dialogo cambiar precios-->
+                <p:dialog header="Modificar precio de venta" widgetVar="w_precioVenta" id="dlgPrecio" modal="true" showEffect="explode" hideEffect="bounce" height="390" width="700">
+                    <p:hotkey bind="esc" handler="PF('w_precioVenta').hide();"/>
+                    <h:form id="formPrecios" style="">
+                        <p:outputPanel id="customPanel" style="margin-left: 30%">
+                            <p:selectOneRadio id="customRadio" value="#{Pos.selectedPrecio}" layout="custom" >
+                                <f:selectItem itemLabel="Red"  itemValue="precio_uno"/>
+                                <f:selectItem itemLabel="Green" itemValue="precio_dos" />
+                                <f:selectItem itemLabel="Blue" itemValue="precio_tres" />
+                                <p:ajax event="valueChange" />
+                            </p:selectOneRadio>
+                            <h3>Precio de venta</h3>
+                            <h:panelGrid columns="3" cellpadding="5">
+                                <p:radioButton id="s1" for="customRadio" itemIndex="0" />
+                                <p:inputText id="campoPreVenta" value="#{Pos.campoPreVenta}" style="margin-left: 10px" readonly="true"/>
+                            </h:panelGrid>
+                            <h3>Precio de mayoreo 1</h3>
+                            <h:panelGrid columns="3" cellpadding="5">
+                                <p:radioButton  id="s2" for="customRadio" itemIndex="1" />
+                                <p:inputText id="campoPreMay1" value="#{Pos.campoPreMay1}" style="margin-left: 10px" readonly="true"/>
+                            </h:panelGrid>
+                            <h3>Precio de mayoreo 2</h3>
+                            <h:panelGrid columns="3" cellpadding="5">
+                                <p:radioButton id="s3" for="customRadio" itemIndex="2" />
+                                <p:inputText id="campoPreMay2" value="#{Pos.campoPreMay2}" style="margin-left: 10px" readonly="true"/>
+                            </h:panelGrid>
+                        </p:outputPanel>
+                        <br></br>
+                        <br></br><br></br>
+                        <table style="width: 100%;margin-bottom: 7px;">
+                            <br></br>
+                            <tr style="height: 10px;">
+                                <td style="text-align: right;width: 20%;">
+                                    <p:outputLabel value="Presiona la tecla:" style="font-size: 15px; padding-right: 10px; color: red;"/>
+                                </td>
+                                <td style="width: 10%">
+                                    <p:commandLink style="position: rigth;">
+                                        <button class="btn btn-primary" type="button">
+                                            <center>
+                                                <p:outputLabel value="ESC" styleClass="textCommand"/>
+                                            </center>
+                                        </button>
+                                    </p:commandLink>
+                                </td>
+                                <td>
+                                    <p:outputLabel value="para continuar la venta" style="font-size: 15px; padding-right: 10px; color: red"/>
+                                </td>
+                            </tr>
+
+                        </table>
+                        <p:commandLink actionListener="#{Pos.cambiarPrecio}" style="position: rigth;" update=":form1:form:table_ventas :form1:totalVenta">
+                            <button class="btn btn-primary" type="button">
+                                <center>
+                                    <p:outputLabel value="Modificar precio" styleClass="textCommand"/>
+                                </center>
+                            </button>
+                        </p:commandLink>
+                        <p:commandLink onclick="PF('w_precioVenta').hide();" style="position: rigth;">
+                            <button class="btn btn-primary" type="button">
+                                <center>
+                                    <p:outputLabel value="Continuar vendiendos" styleClass="textCommand"/>
+                                </center>
+                            </button>
+                        </p:commandLink>
+                    </h:form>
+                </p:dialog>
+
+                <!-- Dialogo verificar precios-->
+                <p:dialog header="Verificar de precios" widgetVar="w_verificar" id="dlgVerificador" modal="true" showEffect="explode" hideEffect="bounce" height="500" width="600">
+                    <p:hotkey bind="esc" handler="PF('w_verificar').hide();"/>
+
+                    <table style="width: 100%;">
+                        <br></br>
+                        <tr style="height: 50px;">
+                            <td style="text-align: right;">
+                                <p:outputLabel value="Buscar:  " style="font-size: 25px; font-weight: bold; padding-right: 10px;"/>
+                            </td>
+                            <td>
+                                <p:inputText id="campoBusqueda3" value="#{Pos.campoBusqueda2}" style="width: 300px; height: 50px; font-size: 30px; font-weight: bold; text-align: right;">
+                                    <p:ajax event="keyup" listener="#{Pos.filtrar}" update=":form3:verifcar_precios"/>
+                                </p:inputText>
+                            </td>
+                        </tr>  
+                    </table>
+                    <br></br>
+                    <br></br><br></br><br></br><br></br>
+                    <h:form id="form3" style="">
+                        <p:dataTable id="verifcar_precios" value="#{Pos.listaProductos}" selectionMode="single" selection="#{Pos.selectedProduct}" rowKey="#{product.id}" var="product" style="margin-bottom:0; height: 230px; max-height: 230px;"
+                                     scrollable="true" widgetVar="carsTable">
+
+
+
+                            <p:ajax event="rowDblselect" listener="#{Pos.onRowSelect}" update=":form1:form:table_ventas :form1:totalVenta" onsuccess="PF('w_buscar').hide()"/>
+
+                            <p:column headerText="Clave" width="70" style="font-size: 12px; font-weight: normal;">
+                                <h:outputText value="1"/>
+                            </p:column>
+
+                            <p:column headerText="Descripción" style="font-size: 12px; font-weight: normal;">
+                                <h:outputText value="#{product.descripcion}" />
+                            </p:column>
+
+                            <p:column headerText="Precio U." width="80" style="font-size: 12px; font-weight: normal;">
+                                <h:outputText value="#{product.precioUni}" />
+                            </p:column>
+
+                            <p:column headerText="Descuento" width="100" style="font-size: 12px; font-weight: normal;">
+                                <h:outputText value="#{product.descuento}" />
+                            </p:column>
+
+                            <p:column headerText="TD" width="60" style="font-size: 12px; font-weight: normal;">
+                                <h:outputText value="#{product.td}" />
+                            </p:column>
+
+                            <p:column headerText="Importe" width="100" style="font-size: 12px; font-weight: normal;">
+                                <h:outputText value="#{product.importe}" />
+                            </p:column>
+
+                        </p:dataTable>
+                        <table style="width: 100%;">
+                            <br></br>
+                            <tr style="height: 50px;">
+                                <td style="text-align: right;width: 20%;">
+                                    <p:outputLabel value="Presiona la tecla:" style="font-size: 15px; padding-right: 10px; color: red;"/>
+                                </td>
+                                <td style="width: 10%">
+                                    <p:commandLink style="background: #1995dc;">
+                                        <button class="btn btn-primary boton_opciones" type="button">
+                                            <center>
+                                                <p:outputLabel value="ESC" styleClass="textCommand" />
+                                            </center>
+                                        </button>
+                                    </p:commandLink>
+                                </td>
+                                <td>
+                                    <p:outputLabel value="para continuar la venta" style="font-size: 15px; padding-right: 10px; color: red"/>
+                                </td>
+                            </tr>
+
+                        </table>
+                        <p:commandLink style="position: rigth;">
+                            <button class="btn btn-primary" type="button">
+                                <center>
+                                    <p:outputLabel value="Aceptar" styleClass="textCommand"/>
+                                </center>
+                            </button>
+                        </p:commandLink>
+                    </h:form>
+                </p:dialog>
+
+                <!-- Dialogo cerrar venta-->
+                <p:dialog header="Cerrar venta" widgetVar="w_cobrar" id="dlgCobrar" modal="true" showEffect="explode" hideEffect="bounce" height="400" width="500">
+                    <p:hotkey bind="esc" handler="PF('w_cobrar').hide();"/>
+                    <h:form id="formCobrar" style=""><br/><br/>
+                        <p:outputPanel id="customPanel" style="margin-bottom:10px">
+                            <h:panelGrid columns="2" cellpadding="4" style="margin-left: 20%">
+                                <h:outputLabel for="opt2" value="Tipo de pago:" style="font-size: 20px;font-weight: bold;"/>
+                                <p:selectOneMenu id="docto" style="width:150px;margin-bottom: 4px;" styleClass="menuPago">
+                                    <f:selectItem itemLabel="Efectivo" itemValue="te"/>
+                                    <f:selectItem itemLabel="Tarjeta" itemValue="tt" />
+                                </p:selectOneMenu>
+
+                                <h:outputLabel for="opt2" value="Por cobrar:" style="font-size: 20px;font-weight: bold;"/>
+                                <p:inputText id="campoTotal" value="#{Pos.campoTotal}" readonly="true" style="width:150px;height: 45px;margin-bottom: 4px;font-size: 20px;text-align: center;font-weight: bold;"/>
+
+                                <h:outputLabel for="opt3" value="Recibido:" style="font-size: 20px;font-weight: bold;"/>
+                                <p:inputText id="campoRecibido" value="#{Pos.campoRecibido}" style="width:150px;height: 45px;margin-bottom: 4px;font-size: 20px;text-align: center;font-weight: bold;">
+                                    <p:ajax event="keyup" listener="#{Pos.camposCobrar}" update="campoCambio"/>
+                                </p:inputText>
+                                <h:outputLabel for="opt3" value="Cambio:" style="font-size: 20px;font-weight: bold;"/>
+                                <p:inputText id="campoCambio" value="#{Pos.campoCambio}" readonly="true" style="width:150px;height: 45px;font-size: 20px;text-align: center;font-weight: bold;"/>
+                            </h:panelGrid>
+                        </p:outputPanel>
+
+                        <br></br>
+                        <br></br><br></br>  
+                        <table style="width: 100%;">
+                            <br></br>
+                            <tr style="height: 50px;">
+                                <td style="text-align: right;width: 20%;">
+                                    <p:outputLabel value="Presiona la tecla:" style="font-size: 15px; padding-right: 10px; color: red;"/>
+                                </td>
+                                <td style="width: 10%">
+                                    <p:commandLink style="position: right;">
+                                        <button class="btn btn-primary" type="button">
+                                            <center>
+                                                <p:outputLabel value="ESC" styleClass="textCommand"/>
+                                            </center>
+                                        </button>
+                                    </p:commandLink>
+                                </td>
+                                <td>
+                                    <p:outputLabel value="para continuar la venta" style="font-size: 15px; padding-right: 10px; color: red"/>
+                                </td>
+                            </tr>
+
+                        </table>
+
+                    </h:form>
+                    <p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false" resizable="false">
+                        <p:graphicImage name="/resources/images/icons/almacena_venta.png" />
+                    </p:dialog>
+                    <h:form>
+                        <p:commandButton value="Download" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" icon="ui-icon-arrowthick-1-s">
+
+                            <p:fileDownload  value="#{Pos.file}" />
+                        </p:commandButton>
+                    </h:form>
+                    <p:commandLink actionListener="#{Pos.cobrar}" update=":form1:form:table_ventas :form1:totalVenta :form1:impuestos :form1:descuento :form1:en_espera :formE:en_espera2" onsuccess="PF('w_cobrar').hide();" style="position: rigth;">
+                        <button class="btn btn-primary" type="button">
+                            <center>
+                                <p:outputLabel value="Cobrar" styleClass="textCommand"/>
+                            </center>
+                        </button>
+                    </p:commandLink>    
+                    <p:commandLink onclick="PF('w_cobrar').hide();"  style="position: rigth;">
+                        <button class="btn btn-primary" type="button">
+                            <center>
+                                <p:outputLabel value="Continuar vendiendos" styleClass="textCommand"/>
+                            </center>
+                        </button>
+                    </p:commandLink>
+                    <script type="text/javascript">
+                        function start() {
+                            PF('statusDialog').show();
+                        }
+
+                        function stop() {
+                            PF('statusDialog').hide();
+                        }
+                    </script>
+                </p:dialog>
+
+                <!-- Dialogo cambiar precios-->
+                <p:dialog header="Selecione el tipo de documento" widgetVar="w_documento" id="dlgDoc" modal="true" showEffect="explode" hideEffect="bounce" height="200" width="650">
+                    <p:hotkey bind="esc" handler="PF('w_documento').hide();"/>
+                    <h:form style=""><br/>
+                        <p:outputPanel id="customPanel" style="margin-bottom:10px;margin-left: 40%;">
+                            <p:selectOneRadio id="customRadio" value="event_slecion" layout="custom">
+                                <f:selectItem itemLabel="Red" itemValue="Red" />
+                                <f:selectItem itemLabel="Green" itemValue="Green" />
+                                <f:selectItem itemLabel="Blue" itemValue="Blue" />
+                            </p:selectOneRadio>
+
+
+                            <h:panelGrid columns="3" cellpadding="5">
+                                <p:radioButton id="opt1" for="customRadio" itemIndex="1" />
+                                <h:outputLabel for="opt2" value="Ticket" style="font-size: 30px"/>
+                            </h:panelGrid>
+                        </p:outputPanel>
+                        <br></br>
+                        <table style="width: 100%;">
+                            <br></br>
+                            <tr style="height: 50px;">
+                                <td style="text-align: right;width: 20%;">
+                                    <p:outputLabel value="Presiona la tecla:" style="font-size: 15px; padding-right: 10px; color: red;"/>
+                                </td>
+                                <td style="width: 10%">
+                                    <p:commandLink style="position: rigth;">
+                                        <button class="btn btn-primary" type="button">
+                                            <center>
+                                                <p:outputLabel value="ESC" styleClass="textCommand"/>
+                                            </center>
+                                        </button>
+                                    </p:commandLink>
+                                </td>
+                                <td>
+                                    <p:outputLabel value="para continuar la venta" style="font-size: 15px; padding-right: 10px; color: red"/>
+                                </td>
+                            </tr>
+
+                        </table>
+                        <p:commandLink style="position: rigth;">
+                            <button class="btn btn-primary" type="button">
+                                <center>
+                                    <p:outputLabel value="Aceptar" styleClass="textCommand"/>
+                                </center>
+                            </button>
+                        </p:commandLink>
+                    </h:form>
+                </p:dialog>
+
+                <!-- Dialogo eliminar producto-->
+                <p:dialog header="Eliminar producto de la lista" widgetVar="w_eliminar" id="dlgEliminar" modal="true" showEffect="explode" hideEffect="bounce" height="190" width="700">
+                    <p:hotkey bind="esc" handler="PF('w_eliminar').hide();"/>
+                    <br></br>
+                    <h:form style="">
+                        <h:panelGrid columns="1" cellpadding="1">
+                            <h:outputLabel for="opt2" value="Desea eliminar de la lista el producto ?" style="font-size: 20px"/>
+                        </h:panelGrid>
+                        <br></br>
+                        <br></br><br></br>
+                        <table style="width: 100%;margin-bottom: 10px;">
+                            <br></br>
+                            <tr >
+                                <td style="text-align: right;width: 20%;">
+                                    <p:outputLabel value="Presiona la tecla:" style="font-size: 15px; padding-right: 10px; color: red;"/>
+                                </td>
+                                <td style="width: 10%">
+                                    <p:commandLink style="position: rigth;">
+                                        <button class="btn btn-primary" type="button">
+                                            <center>
+                                                <p:outputLabel value="ESC" styleClass="textCommand"/>
+                                            </center>
+                                        </button>
+                                    </p:commandLink>
+                                </td>
+                                <td>
+                                    <p:outputLabel value="para continuar la venta" style="font-size: 15px; padding-right: 10px; color: red"/>
+                                </td>
+                            </tr>
+
+                        </table>
+                        <p:commandLink style="position: rigth;" actionListener="#{Pos.eliminar}" update=":form1:form:table_ventas :form1:totalVenta :form1:impuestos :form1:descuento"
+                                       onclick="PF('w_eliminar').hide();">
+                            <button class="btn btn-primary" type="button">
+                                <center>
+                                    <p:outputLabel value="Aceptar" styleClass="textCommand"/>
+                                </center>
+                            </button>
+                        </p:commandLink>
+                        <p:commandLink style="position: rigth;" onclick="PF('w_eliminar').hide();">
+                            <button class="btn btn-primary" type="button">
+                                <center>
+                                    <p:outputLabel value="Continuar vendiendo" styleClass="textCommand"/>
+                                </center>
+                            </button>
+                        </p:commandLink>
+                    </h:form>
+                </p:dialog>
+
+                <!-- Dialogo cambiar cancelar compra-->
+                <p:dialog header="Cancelar venta" widgetVar="w_cancelar" id="dlgCancel" modal="true" showEffect="explode" hideEffect="bounce" height="190" width="700">
+                    <p:hotkey bind="esc" handler="PF('w_cancelar').hide();"/>
+                    <h:form style="">
+                        <p:outputPanel id="customPanel2" style="margin-bottom:10px">
+                            <br/>
+                            <h:panelGrid columns="3" cellpadding="5">
+                                <h:outputLabel for="opt2" value="Desea cancelar la venta ?" style="font-size: 25px; font-weight: bold; padding-right: 10px;"/>
+                            </h:panelGrid>
+                        </p:outputPanel>
+                        <br></br>
+                        <table style="width: 100%;">
+                            <br></br>
+                            <tr style="height: 50px;">
+                                <td style="text-align: right;width: 20%;">
+                                    <p:outputLabel value="Presiona la tecla:" style="font-size: 15px; padding-right: 10px; color: red;"/>
+                                </td>
+                                <td style="width: 10%">
+                                    <p:commandLink style="position: rigth;">
+                                        <button class="btn btn-primary" type="button">
+                                            <center>
+                                                <p:outputLabel value="ESC" styleClass="textCommand"/>
+                                            </center>
+                                        </button>
+                                    </p:commandLink>
+                                </td>
+                                <td>
+                                    <p:outputLabel value="para continuar la venta" style="font-size: 15px; padding-right: 10px; color: red"/>
+                                </td>
+                            </tr>
+
+                        </table>
+                        <p:commandLink style="position: rigth;" actionListener="#{Pos.cancelarVenta}" onclick="PF('w_cancelar').hide();" update=":form1:form:table_ventas :form1:totalVenta :form1:impuestos :form1:descuento :form1:en_espera :formE:en_espera2">
+                            <button class="btn btn-primary" type="button">
+                                <center>
+                                    <p:outputLabel value="Aceptar" styleClass="textCommand"/>
+                                </center>
+                            </button>
+                        </p:commandLink>
+                        <p:commandLink style="position: rigth;" onclick="PF('w_cancelar').hide();" update=":form1:form:table_ventas :form1:totalVenta">
+                            <button class="btn btn-primary" type="button">
+                                <center>
+                                    <p:outputLabel value="Continuar vendiendo" styleClass="textCommand"/>
+                                </center>
+                            </button>
+                        </p:commandLink>
+                    </h:form>
+                </p:dialog>
+
+                <!-- Dialogo clientes-->
+                <p:dialog header="Seleccionar cliente" widgetVar="w_clientes" id="dlgClientes" modal="true" showEffect="explode" hideEffect="bounce" height="500" width="700" styleClass="dialogo" >
+                    <p:hotkey bind="esc" handler="PF('w_clientes').hide();"/>
+                    <table style="width: 100%;">
+                        <br></br>
+                        <tr style="height: 50px;">
+                            <td style="text-align: right;">
+                                <p:outputLabel value="Buscar:  " style="font-size: 25px; font-weight: bold; padding-right: 10px;"/>
+                            </td>
+                            <td>
+                                <p:inputText id="campoBusquedaCli" value="#{Pos.busquedaClientes}" style="width: 300px; height: 50px; font-size: 30px; font-weight: bold; text-align: right;">
+                                    <p:ajax event="keyup" listener="#{Pos.filtrarClientes}" update=":formC:all_clients"/>
+                                </p:inputText>
+                            </td>
+                        </tr>  
+                    </table>
+                    <br></br>
+                    <h:form  id="formC" style="">
+                        <p:dataTable id="all_clients" value="#{Pos.listaClientes}" selectionMode="single" selection="#{Pos.selectedClient}" rowKey="#{clientes.id_cliente}" var="clientes" style="margin-bottom:0; height: 230px; max-height: 230px;"
+                                     scrollable="true">
+                            <p:ajax event="rowDblselect" listener="#{Pos.rowSelectCli}" update=":form1:cliente" onsuccess="PF('w_clientes').hide()"/>
+
+                            <p:column headerText="Clave" width="70" style="font-size: 12px; font-weight: normal;">
+                                <h:outputText value="#{clientes.id_cliente}"/>
+                            </p:column>
+
+                            <p:column headerText="Nombre" style="font-size: 12px; font-weight: normal;">
+                                <h:outputText value="#{clientes.nombre}" />
+                            </p:column>
+                        </p:dataTable>
+                        <br></br><br></br><br></br><br></br>
+
+                        <table style="width: 100%;">
+                            <br></br>
+                            <tr style="text-align: right">
+                                <p:outputLabel value="Doble clic para seleccionar cliente:" style="font-size: 13px; padding-right: 10px; color: #1995dc"/>
+                            </tr>
+                            <tr style="height: 50px;">
+                                <td style=";width: 20%;">
+                                    <p:outputLabel value="Presiona la tecla:" style="font-size: 13px; color: red;"/>
+                                </td>
+                                <td style="width: 10%">
+                                    <p:commandLink style="position: rigth;">
+                                        <button class="btn btn-primary" type="button">
+                                            <center>
+                                                <p:outputLabel value="ESC" styleClass="textCommand"/>
+                                            </center>
+                                        </button>
+                                    </p:commandLink>
+                                </td>
+                                <td>
+                                    <p:outputLabel value="para continuar la venta" style="font-size: 13px; padding-right: 10px; color: red"/>
+                                </td>
+                            </tr>
+
+                        </table>
+
+                    </h:form>
+                    <p:commandLink actionListener="#{Pos.agregar}" update=":form1:form:table_ventas" onsuccess="PF('w_buscar').hide()"  style="margin-left: 90%">
+                        <button class="btn btn-primary" type="button">
+
+                            <p:outputLabel value="Aceptar" styleClass="textCommand"/>
+
+                        </button>
+                    </p:commandLink>
+                </p:dialog>
+
+                <!-- Dialogo cambiar vendedor-->
+                <p:dialog header="Cambio de vendedor" widgetVar="w_vendedor" id="dlgVendedor" modal="true" showEffect="explode" hideEffect="bounce" height="250" width="700">
+                    <p:hotkey bind="esc" handler="PF('w_vendedor').hide();"/>
+
+                    <h:form >
+                        <h:panelGrid columns="2" cellpadding="5" style="margin-left: 20%;margin-top: 20px;">
+                            <h:outputLabel for="username" value="Usuario: " style="font-size: 25px"/>
+                            <p:inputText id="username" value="#{Pos.username}" required="true" label="username" style="width: 300px; height: 50px; font-size: 25px; font-weight: bold; text-align: right;"/>
+
+                            <h:outputLabel for="password" value="Contraseña:" style="font-size: 25px"/>
+                            <p:password id="password" value="#{Pos.password}" required="true" label="password" style="width: 300px; height: 50px; font-size: 25px; font-weight: bold; text-align: right;"/>
+                            <h:outputLabel id="errorUsuario" value="#{Pos.errorUsuario}" style="color: red;" />
+                        </h:panelGrid>
+                        <br></br>
+                        <table style="width: 100%;">
+                            <br></br>
+                            <tr style="height: 20px;">
+                                <td style="text-align: right;width: 20%;">
+                                    <p:outputLabel value="Presiona la tecla:" style="font-size: 15px; padding-right: 10px; color: red;"/>
+                                </td>
+                                <td style="width: 10%">
+                                    <p:commandLink style="position: rigth;">
+                                        <button class="btn btn-primary" type="button">
+                                            <center>
+                                                <p:outputLabel value="ESC" styleClass="textCommand"/>
+                                            </center>
+                                        </button>
+                                    </p:commandLink>
+                                </td>
+                                <td>
+                                    <p:outputLabel value="para continuar la venta" style="font-size: 15px; padding-right: 10px; color: red"/>
+                                </td>
+                            </tr>
+
+                        </table><br/>
+
+
+                        <p:commandLink style="position: rigth;"  actionListener="#{Pos.cambiarVendedor}" update=":form1:vendedorId errorUsuario" onsuccess="PF('w_vendedor').hide();">
+                            <button class="btn btn-primary" type="button">
+                                <center>
+                                    <p:outputLabel value="Aceptar" styleClass="textCommand"/>
+                                </center>
+                            </button>
+                        </p:commandLink>
+                        <p:commandLink style="position: rigth;" onclick="PF('w_cantidad').hide();">
+                            <button class="btn btn-primary" type="button">
+                                <center>
+                                    <p:outputLabel value="Continuar vendiendo" styleClass="textCommand"/>
+                                </center>
+                            </button>
+                        </p:commandLink>
+                    </h:form>
+                </p:dialog>
+
+                <!-- Dialogo poner en espera-->
+                <p:dialog header="Poner venta en espera" widgetVar="w_espera" id="dlgEspera" modal="true" showEffect="explode" hideEffect="bounce" height="170" width="700">
+
+
+                    <p:hotkey bind="esc" handler="PF('w_espera').hide();"/>
+                    <h:form id="espera" style="">
+                        <h:outputLabel for="username" value="Desea poner en espera la venta ?" style="font-size: 25px;"/>
+                        <br></br>
+                        <br></br><br></br>
+                        <table style="width: 100%;">
+                            <br></br>
+                            <tr style="height: 20px;">
+                                <td style="text-align: right;width: 20%;">
+                                    <p:outputLabel value="Presiona la tecla:" style="font-size: 15px; padding-right: 10px; color: red;"/>
+                                </td>
+                                <td style="width: 10%">
+                                    <p:commandLink style="position: rigth;">
+                                        <button class="btn btn-primary" type="button">
+                                            <center>
+                                                <p:outputLabel value="ESC" styleClass="textCommand"/>
+                                            </center>
+                                        </button>
+                                    </p:commandLink>
+                                </td>
+                                <td>
+                                    <p:outputLabel value="para continuar la venta" style="font-size: 15px; padding-right: 10px; color: red"/>
+                                </td>
+                            </tr>
+                        </table><br/>
+                        <p:commandLink actionListener="#{Pos.esperar}" onclick="PF('w_espera').hide();" update="form1:form:table_ventas :form1:totalVenta :form1:descuento  :form1:impuestos :form1:en_espera :formE:en_espera2" style="position: rigth;">
+                            <button class="btn btn-primary" type="button">
+                                <center>
+                                    <p:outputLabel value="Aceptar" styleClass="textCommand"/>
+                                </center>
+                            </button>
+                        </p:commandLink>
+                        <p:commandLink style="position: rigth;" onclick="PF('w_espera').hide();">
+                            <button class="btn btn-primary" type="button">
+                                <center>
+                                    <p:outputLabel value="Continuar vendiendo" styleClass="textCommand"/>
+                                </center>
+                            </button>
+                        </p:commandLink>
+                    </h:form>
+                </p:dialog>
+
+                <!-- Dialogo clientes-->
+                <p:dialog header="Seleccionar venta en espera" widgetVar="w_continuar" id="dlgContinuar" modal="true" showEffect="explode" hideEffect="bounce" height="270" width="700" styleClass="dialogo" >
+                    <p:hotkey bind="esc" handler="PF('w_continuar').hide();"/>
+                    <br></br>
+                    <h:form  id="formE" style="">
+                        <p:dataTable id="en_espera2" var="venta" scrollable="true" value="#{Pos.ventasEspera}" scrollHeight="80" editable="true" style="height: 90px;width:280px;margin-left: 30%">
+
+                            <p:column headerText="Venta" style="height: 1px">
+                                <h:outputText value="Venta #{venta.id_venta}" style="height: 10px" />
+                            </p:column>
+
+                            <p:column style="width:90px;height: 1px">
+                                <p:commandLink value="Continuar" actionListener="#{Pos.continuar(venta,true)}" onsuccess="PF('w_continuar').hide();" update=":form1:form:table_ventas :form1:totalVenta :form1:impuestos :form1:descuento"/>
+                            </p:column>
+                        </p:dataTable>
+                        <br></br><br></br><br></br><br></br>
+
+                        <table style="width: 100%;">
+                            <br></br>
+                            <tr style="height: 50px;">
+                                <td style=";width: 20%;">
+                                    <p:outputLabel value="Presiona la tecla:" style="font-size: 13px; color: red;"/>
+                                </td>
+                                <td style="width: 10%">
+                                    <p:commandLink style="position: rigth;">
+                                        <button class="btn btn-primary" type="button">
+                                            <center>
+                                                <p:outputLabel value="ESC" styleClass="textCommand"/>
+                                            </center>
+                                        </button>
+                                    </p:commandLink>
+                                </td>
+                                <td>
+                                    <p:outputLabel value="para continuar la venta" style="font-size: 13px; padding-right: 10px; color: red"/>
+                                </td>
+                            </tr>
+
+                        </table>
+                        <p:commandLink onsuccess="PF('w_continuar').hide()"  style="margin-left: 90%">
+                            <button class="btn btn-primary" type="button">
+
+                                <p:outputLabel value="Aceptar" styleClass="textCommand"/>
+
+                            </button>
+                        </p:commandLink>
+                    </h:form>
+
+                </p:dialog>
+
+
+
+            </ui:define>
+        </ui:composition>
+
+    </h:body>
+</html>
+
